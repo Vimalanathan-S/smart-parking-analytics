@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Parking Analytics Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="title-wrap">
+        <h1>Smart Parking Analytics Dashboard</h1>
+        <p>ThingSpeak-based live monitoring and historical analytics</p>
+      </div>
+      <button class="refresh" onclick="loadDashboard()">Refresh Now</button>
+    </div>
+
+    <div id="alertBox" class="alert">⚠ All parking slots are currently FULL</div>
+
+    <div class="grid-cards">
+      <div class="card">
+        <div class="metric-title">Current Vacant Slots</div>
+        <div class="metric-value" id="vacantCount">-</div>
+        <div class="small-note">Available right now</div>
+      </div>
+
+      <div class="card">
+        <div class="metric-title">Current Full Slots</div>
+        <div class="metric-value" id="fullCount">-</div>
+        <div class="small-note">Occupied right now</div>
+      </div>
+
+      <div class="card">
+        <div class="metric-title">Current Occupancy</div>
+        <div class="metric-value" id="occupancyPercent">-</div>
+        <div class="small-note">Based on 3 slots</div>
+      </div>
+
+      <div class="card">
+        <div class="metric-title">Peak Hour</div>
+        <div class="metric-value" id="peakHour">-</div>
+        <div class="small-note">Highest average occupancy</div>
+      </div>
+
+      <div class="card">
+        <div class="metric-title">Busiest Day</div>
+        <div class="metric-value" id="busiestDay">-</div>
+        <div class="small-note">Highest average occupancy</div>
+      </div>
+
+      <div class="card">
+        <div class="metric-title">Last Updated</div>
+        <div class="metric-value" id="lastUpdated" style="font-size:18px;">-</div>
+        <div class="small-note">Latest ThingSpeak feed time</div>
+      </div>
+    </div>
+
+    <div class="status-grid">
+      <div class="slot-box">
+        <div class="slot-name">Parking Slot P1</div>
+        <div class="slot-status" id="p1Status">-</div>
+      </div>
+      <div class="slot-box">
+        <div class="slot-name">Parking Slot P2</div>
+        <div class="slot-status" id="p2Status">-</div>
+      </div>
+      <div class="slot-box">
+        <div class="slot-name">Parking Slot P3</div>
+        <div class="slot-status" id="p3Status">-</div>
+      </div>
+    </div>
+
+    <div class="chart-grid-2">
+      <div class="card chart-card">
+        <h3>Average Occupancy by Hour</h3>
+        <canvas id="hourlyChart"></canvas>
+        <div class="footer-note">Shows which hour of the day is most crowded.</div>
+      </div>
+      <div class="card chart-card">
+        <h3>Current Occupancy Distribution</h3>
+        <canvas id="distributionChart" class="short-canvas"></canvas>
+        <div class="footer-note">Current vacant vs full slots.</div>
+      </div>
+    </div>
+
+    <div class="chart-grid-3">
+      <div class="card chart-card">
+        <h3>Average Occupancy by Weekday</h3>
+        <canvas id="weekdayChart" class="short-canvas"></canvas>
+      </div>
+      <div class="card chart-card">
+        <h3>Slot Utilization Ranking</h3>
+        <canvas id="slotUsageChart" class="short-canvas"></canvas>
+      </div>
+      <div class="card chart-card">
+        <h3>Full-Parking Events per Day</h3>
+        <canvas id="fullEventsChart" class="short-canvas"></canvas>
+      </div>
+    </div>
+
+    <div class="card table-card">
+      <h3>Recent Parking Records</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>P1</th>
+              <th>P2</th>
+              <th>P3</th>
+              <th>Vacant</th>
+              <th>Full</th>
+              <th>Occupancy %</th>
+            </tr>
+          </thead>
+          <tbody id="recentTableBody"></tbody>
+        </table>
+      </div>
+      <div class="footer-note">Most recent 15 records from ThingSpeak.</div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
